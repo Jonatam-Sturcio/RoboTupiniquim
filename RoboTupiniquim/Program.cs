@@ -59,69 +59,40 @@
         }
         static int[] RealizaMovimento(int[] limite, int[] robo, string movimento) {
             string[] parts = movimento.ToUpper().Split("M");
-            for (int i = 0; i < parts.Length - 1; i++) {
-                if (parts[i].Contains("E")) {
-                    robo = movimentar(robo, 1, limite);
+            if (parts.Length > 1) {
+                for (int i = 0; i < parts.Length - 1; i++) {
+                    if (parts[i].Contains("E")) {
+                        robo = RotacionaRobo(robo, parts);
+                        robo = movimentar(robo, 1, limite);
+                    }
+                    else if (parts[i].Contains("D")) {
+                        robo = RotacionaRobo(robo, parts);
+                        robo = movimentar(robo, 2, limite);
+                    }
+                    else {
+                        robo = movimentar(robo, 0, limite);
+                    }
                 }
-                else if (parts[i].Contains("D")) {
-                    robo = movimentar(robo, 2, limite);
-                }
-                else {
-                    robo = movimentar(robo, 0, limite);
-                }
+            }
+            else {
+                robo = RotacionaRobo(robo, parts);
             }
             return robo;
         }
         static int[] movimentar(int[] robo, int direcao, int[] limite) {
-            if (direcao == 1) {
-                if (robo[2] == 1 && PermiteMovimento(limite, robo)) {
-                    robo[2] = 4;
-                    robo[0]--;
-                }
-                else if (robo[2] == 2 && PermiteMovimento(limite, robo)) {
-                    robo[2]--;
-                    robo[1]++;
-                }
-                else if (robo[2] == 3 && PermiteMovimento(limite, robo)) {
-                    robo[2]--;
-                    robo[0]++;
-                }
-                else if (robo[2] == 4 && PermiteMovimento(limite, robo)) {
-                    robo[2]--;
-                    robo[1]--;
-                }
+
+            if (robo[2] == 1 && PermiteMovimento(limite, robo)) {
+                robo[1]++;
             }
-            else if (direcao == 2) {
-                if (robo[2] == 4 && PermiteMovimento(limite, robo)) {
-                    robo[2] = 1;
-                    robo[1]++;
-                }
-                else if (robo[2] == 3 && PermiteMovimento(limite, robo)) {
-                    robo[2]++;
-                    robo[0]--;
-                }
-                else if (robo[2] == 2 && PermiteMovimento(limite, robo)) {
-                    robo[2]++;
-                    robo[1]--;
-                }
-                else if (robo[2] == 1 && PermiteMovimento(limite, robo)) {
-                    robo[2]++;
-                    robo[0]++;
-                }
+            else if (robo[2] == 2 && PermiteMovimento(limite, robo)) {
+                robo[0]++;
             }
-            else {
-                if (robo[2] == 1 && PermiteMovimento(limite, robo)) {
-                    robo[1]++;
-                }
-                else if (robo[2] == 2 && PermiteMovimento(limite, robo)) {
-                    robo[0]++;
-                }
-                else if (robo[2] == 3 && PermiteMovimento(limite, robo)) {
-                    robo[1]--;
-                }
-                else if (robo[2] == 4 && PermiteMovimento(limite, robo)) {
-                    robo[0]--;
-                }
+            else if (robo[2] == 3 && PermiteMovimento(limite, robo)) {
+                robo[1]--;
+            }
+            else if (robo[2] == 4 && PermiteMovimento(limite, robo)) {
+                robo[0]--;
+
             }
             return robo;
         }
@@ -158,6 +129,29 @@
             else {
                 return true;
             }
+        }
+        static int[] RotacionaRobo(int[] robo, string[] parts) {
+            foreach (string part in parts) {
+                foreach (char letter in part) {
+                    if (part.Contains("E")) {
+                        if (robo[2] == 1) {
+                            robo[2] = 4;
+                        }
+                        else {
+                            robo[2]--;
+                        }
+                    }
+                    else {
+                        if (robo[2] == 4) {
+                            robo[2] = 1;
+                        }
+                        else {
+                            robo[2]++;
+                        }
+                    }
+                }
+            }
+            return robo;
         }
         #endregion
     }
